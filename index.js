@@ -6,7 +6,7 @@ io.on('connection', socket => {
   console.log('a user connected');
 });
 
-setTimeout(() => io.emit('date', new Date().getTime()))
+setTimeout(() => io.emit('date', new Date().getTime()), 1000)
 
 http.listen(process.env.PORT || 3000, () => {
   console.log('listening on *:3000');
