@@ -1,3 +1,4 @@
+require('dotenv').config()
 // set up express/socket.io
 const app = require('express')();
 const http = require('http').Server(app);
