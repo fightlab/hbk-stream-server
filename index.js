@@ -3,6 +3,13 @@ require('dotenv').config()
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const challonge = require('challonge');
+const { URL } = require('url')
+const _ = require('lodash')
+
+const challongeClient = challonge.createClient({
+  apiKey: process.env.CHALLONGE_API_KEY
+});
 
 // in memory data score
 const data = {
@@ -24,8 +31,32 @@ const data = {
     facebook: 'fightlabbrighton',
     twitter: 'fight_lab',
     web: 'hbk.gg'
-  }
+  },
+  curl: '',
+  participants: []
 }
+
+const getChallongeParticipants = url => new Promise((resolve, reject) => {
+  const bracket = new URL(url)
+  const subdomain = bracket.hostname.split('.')[0]
+  const path = bracket.pathname.replace('/', '')
+  
+  challongeClient.participants.index({
+    id: `${subdomain}-${path}`,
+    callback: (err, response) => {
+      if (err) {
+        return reject(err)
+      }
+
+      data.participants = _.map(response, ({ participant }) => ({
+        displayName: participant.displayName,
+        challongeUsername: participant.challongeUsername
+      }))
+
+      return resolve(data.participants)
+    }
+  })
+})
 
 // init connection
 io.on('connection', socket => {
@@ -47,6 +78,15 @@ io.on('connection', socket => {
   socket.on('camera-update', camera => {
     data.camera = camera
     io.emit('camera', camera)
+  })
+
+  socket.on('participants-get', () => [
+    io.emit('participants', { curl: data.curl, participants: data.participants })
+  ])
+
+  socket.on('challonge-participants-req', async url => {
+    data.curl = url
+    socket.emit('challonge-participants-res', await getChallongeParticipants(url))
   })
 });
 

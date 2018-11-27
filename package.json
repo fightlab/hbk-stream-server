@@ -4,8 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "challonge": "^2.1.2",
     "dotenv": "^6.1.0",
     "express": "^4.16.3",
+    "lodash": "^4.17.11",
     "socket.io": "^2.1.1"
   },
   "scripts": {
