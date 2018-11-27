@@ -48,10 +48,14 @@ const getChallongeParticipants = url => new Promise((resolve, reject) => {
         return reject(err)
       }
 
-      data.participants = _.map(response, ({ participant }) => ({
+      data.participants = [{
+        displayName: '',
+        challongeUsername: ''
+      },
+      ..._.map(response, ({ participant }) => ({
         displayName: participant.displayName,
         challongeUsername: participant.challongeUsername
-      }))
+      }))]
 
       return resolve(data.participants)
     }
