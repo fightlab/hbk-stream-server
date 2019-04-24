@@ -161,10 +161,13 @@ const getChallongeParticipants = url => new Promise(async (resolve, reject) => {
       if (_.get(tournament, `data.data.tournament.slug`, '') === `tournament/${info.tournament}`) {
         const event = _.find(tournament.data.data.tournament.events, event => event.slug === `tournament/${info.tournament}/event/${info.events}`)
         const participants = await getParticipants({ eventId: event.id })
-        return resolve(participants.map(participant => ({
+        return resolve([{
+          displayName: '',
+          challongeUsername: ''
+        }, ...participants.map(participant => ({
           displayName: `${_.get(participant, 'prefix') ? `${_.get(participant, 'prefix')} | ` : ''}${_.get(participant, 'gamerTag', '')}`,
           challongeUsername: _.get(participant, 'contactInfo.name', '')
-        })))
+        }))])
       }
 
       return resolve([])
