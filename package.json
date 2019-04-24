@@ -1,13 +1,15 @@
 {
   "name": "hbk-stream-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
     "challonge": "^2.1.2",
     "dotenv": "^6.1.0",
     "express": "^4.16.3",
     "lodash": "^4.17.11",
+    "smashgg.js": "^4.0.7",
     "socket.io": "^2.1.1"
   },
   "scripts": {
