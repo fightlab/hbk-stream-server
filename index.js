@@ -109,20 +109,21 @@ const data = {
     p1s: 0,
     p2s: 0,
     tl: 'HBK',
-    tr: '#00',
+    tr: '#000',
     bl: 'Brewdog',
     br: 'Brighton'
   },
   camera: {
-    hbk: 'Habrewken #00',
+    hbk: 'Habrewken #000',
     brewdog: 'Brewdog Brighton',
     fgc: 'Brighton Fighting Game Community',
     date: 'Wednesday Xth MONTH 20XX',
     facebook: 'fightlabbrighton',
     twitter: 'fight_lab',
-    web: 'hbk.gg'
+    web: 'hbk.gg',
+    game: 'GAME NAME'
   },
-  curl: '',
+  bracket: 'https://hbk.challonge.com/123_sfv',
   participants: []
 }
 
@@ -202,15 +203,19 @@ io.on('connection', socket => {
   })
 
   socket.on('participants-get', () => [
-    io.emit('participants', { curl: data.curl, participants: data.participants })
+    io.emit('participants', { bracket: data.bracket, participants: data.participants })
   ])
 
-  socket.on('challonge-participants-req', async url => {
-    data.curl = url
-    socket.emit('challonge-participants-res', await getChallongeParticipants(url))
+  socket.on('bracket-get', async url => {
+    data.bracket = url
+    await getChallongeParticipants(url)
+    socket.emit('participants', {
+      bracket: data.bracket,
+      participants: data.participants
+    })
   })
 });
 
 http.listen(process.env.PORT || 3000, () => {
-  console.log('listening on *:3000');
+  console.log(`listening on *:${process.env.PORT || 3000}`);
 });
