@@ -1,6 +1,6 @@
 {
   "name": "hbk-stream-server",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
@@ -16,6 +16,6 @@
   "scripts": {
     "dev": "backpack",
     "build": "backpack build",
-    "start": "backpack build && ./build/main.js"
+    "start": "backpack build && node ./build/main.js"
   }
 }
