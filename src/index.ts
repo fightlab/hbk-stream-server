@@ -1,1 +1,2 @@
-console.log('i am the captain now');
+import './lib/env';
+import './server';

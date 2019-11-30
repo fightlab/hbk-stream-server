@@ -19,5 +19,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "class-methods-use-this": [0],
+        "max-len": "off"
     }
 }

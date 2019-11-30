@@ -1,11 +1,6 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "~*": ["./*"]
-    },
-    "typeRoots": ["node_modules/@types"],
-    "target": "es2020"
-  },
-  "include": ["src/**/*"]
+    "compilerOptions": {
+        "target": "esnext",
+        "moduleResolution": "node"
+    }
 }
