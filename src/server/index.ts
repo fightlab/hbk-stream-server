@@ -1,27 +1,25 @@
 import * as express from 'express';
+import { Server as HttpServer } from 'http';
 
-export class Server {
+class Server {
   public app: express.Express;
+
+  public http: HttpServer;
 
   public port: number;
 
   constructor() {
     this.app = express();
+    this.http = new HttpServer(this.app);
     this.port = this.getPort();
-    this.setRoutes();
     this.start();
   }
 
   private start = (): void => {
-    this.app.listen(this.port, this.onListen);
+    this.http.listen(this.port, this.onListen);
   }
 
-  private onListen = (err: any): void => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
+  private onListen = (): void => {
     if (process.env.NODE_ENV === 'development') {
       console.log('> in development');
     }
@@ -30,19 +28,6 @@ export class Server {
   };
 
   private getPort = (): number => parseInt(process.env.PORT, 10) || 3000;
-
-  private setRoutes = (): void => {
-    this.app.get('/', this.getHomepage);
-  }
-
-  private async getHomepage(_req: express.Request, res: express.Response): Promise<express.Response> {
-    try {
-      const thing = await Promise.resolve({ one: 'two' });
-      return res.json({ ...thing, hello: 'world' });
-    } catch (e) {
-      return res.json({ error: e.message });
-    }
-  }
 }
 
-export default new Server().app;
+export default Server;

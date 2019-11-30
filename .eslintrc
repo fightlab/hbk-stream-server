@@ -20,6 +20,15 @@
     ],
     "rules": {
         "class-methods-use-this": [0],
-        "max-len": "off"
-    }
+        "max-len": "off",
+        "no-unused-vars": "off"
+    },
+    "overrides": [
+        {
+          "files": ["*.ts", "*.tsx"],
+          "rules": {
+            "@typescript-eslint/no-unused-vars": [2, { "args": "none" }]
+          }
+        }
+      ]
 }
