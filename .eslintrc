@@ -23,12 +23,12 @@
         "max-len": "off",
         "no-unused-vars": "off"
     },
-    "overrides": [
-        {
-          "files": ["*.ts", "*.tsx"],
-          "rules": {
-            "@typescript-eslint/no-unused-vars": [2, { "args": "none" }]
-          }
+    "overrides": [{
+        "files": ["*.ts", "*.tsx"],
+        "rules": {
+            "@typescript-eslint/no-unused-vars": [2, {
+                "args": "none"
+            }]
         }
-      ]
+    }]
 }

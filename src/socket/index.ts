@@ -39,7 +39,12 @@ class Socket {
 
       socket.on('bracket-get', async (url) => {
         data.setBracket(url);
-        socket.emit('participants', { bracket: data.getBracket(), participants: data.getParticipants() });
+        try {
+          const participants = await data.getParticipantsFromBracket(url);
+          socket.emit('participants', { bracket: url, participants });
+        } catch (e) {
+          console.error(e);
+        }
       });
     });
   }
