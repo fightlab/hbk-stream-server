@@ -33,6 +33,15 @@ class Socket {
         this.io.emit('camera', camera);
       });
 
+      socket.on('nightbot-get', () => {
+        socket.emit('nightbot', data.getNightbot());
+      });
+
+      socket.on('nightbot-update', (nightbot) => {
+        data.setNightbot(nightbot);
+        this.io.emit('nightbot', nightbot);
+      });
+
       socket.on('participants-get', () => [
         this.io.emit('participants', { bracket: data.getBracket(), participants: data.getParticipants() }),
       ]);

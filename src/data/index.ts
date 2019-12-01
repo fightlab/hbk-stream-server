@@ -39,7 +39,7 @@ class Data {
 
   private nightbot: IDataNightbot = {
     bracket: 'https://hbk.challonge.com',
-    social: 'Follow us from https://hbk.gg',
+    social: '• FOLLOW US ON • WEB: https://hbk.gg • FACEBOOK: https://www.facebook.com/FightLabBrighton/ • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz •',
   };
 
   private callGraphQL = ({ query, variables }) => axios({
@@ -158,7 +158,10 @@ class Data {
 
   public getParticipants = (): Array<IDataParticipant> => this.participants;
 
-  public getNightbot = (key: string): string => this.nightbot[key] || '';
+  public getNightbot = (key?: string): string|IDataNightbot => {
+    if (key) return this.nightbot[key] || '';
+    return this.nightbot;
+  };
 
   public setScoreboard = (scoreboard: object): void => {
     this.scoreboard = scoreboard as IDataScoreboard;
@@ -176,8 +179,8 @@ class Data {
     this.participants = participants as Array<IDataParticipant>;
   };
 
-  public setNightbot = (key: string, value: string): void => {
-    this.nightbot[key] = value;
+  public setNightbot = (nightbot: object): void => {
+    this.nightbot = nightbot as IDataNightbot;
   }
 
   // eslint-disable-next-line no-async-promise-executor
