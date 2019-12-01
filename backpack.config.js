@@ -1,20 +1,20 @@
 module.exports = {
   webpack: (config, options, webpack) => {
     config.entry.main = [
-      './src/index.ts'
-    ]
+      './src/index.ts',
+    ];
 
     config.resolve = {
-      extensions: [".ts", ".js", ".json"]
+      extensions: ['.ts', '.js', '.json'],
     };
 
     config.module.rules.push(
       {
         test: /\.ts$/,
-        loader: 'awesome-typescript-loader'
-      }
+        loader: 'awesome-typescript-loader',
+      },
     );
 
-    return config
-  }
-}
+    return config;
+  },
+};

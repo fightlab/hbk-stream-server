@@ -24,3 +24,8 @@ interface IDataParticipant {
   username: string
   displayName: string
 }
+
+interface IDataNightbot {
+  bracket: string
+  social: string
+}

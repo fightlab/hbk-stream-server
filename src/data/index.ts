@@ -37,6 +37,11 @@ class Data {
 
   private bracket: string = '';
 
+  private nightbot: IDataNightbot = {
+    bracket: 'https://hbk.challonge.com',
+    social: 'Follow us from https://hbk.gg',
+  };
+
   private callGraphQL = ({ query, variables }) => axios({
     url: this.smashAPI,
     method: 'post',
@@ -153,6 +158,8 @@ class Data {
 
   public getParticipants = (): Array<IDataParticipant> => this.participants;
 
+  public getNightbot = (key: string): string => this.nightbot[key] || '';
+
   public setScoreboard = (scoreboard: object): void => {
     this.scoreboard = scoreboard as IDataScoreboard;
   };
@@ -168,6 +175,10 @@ class Data {
   public setParticipants = (participants: Array<object>): void => {
     this.participants = participants as Array<IDataParticipant>;
   };
+
+  public setNightbot = (key: string, value: string): void => {
+    this.nightbot[key] = value;
+  }
 
   // eslint-disable-next-line no-async-promise-executor
   public getParticipantsFromBracket = (bracket: string): Promise<Array<IDataParticipant>> => new Promise(async (resolve, reject) => {
