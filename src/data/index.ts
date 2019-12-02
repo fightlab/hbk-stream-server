@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { createClient } from 'challonge';
 import axios from 'axios';
 import Challonge from '../services/challonge';
 
@@ -7,10 +6,6 @@ class Data {
   private smashAPI: string = 'https://api.smash.gg/gql/alpha';
 
   private smashToken: string = process.env.SMASHGG_API_KEY;
-
-  private challongeClient = createClient({
-    apiKey: process.env.CHALLONGE_API_KEY,
-  });
 
   private challonge = new Challonge();
 
