@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import { createClient } from 'challonge';
 import axios from 'axios';
+import Challonge from '../services/challonge';
 
 class Data {
   private smashAPI: string = 'https://api.smash.gg/gql/alpha';
@@ -10,6 +11,8 @@ class Data {
   private challongeClient = createClient({
     apiKey: process.env.CHALLONGE_API_KEY,
   });
+
+  private challonge = new Challonge();
 
   private scoreboard: IDataScoreboard = {
     p1n: 'Player 1',
@@ -189,31 +192,23 @@ class Data {
       const url: URL = new URL(bracket);
 
       if (url.host.includes('challonge')) {
-        const subdomain = url.hostname.split('.')[0];
-        const path = url.pathname.replace('/', '');
+        const participantsFromChallonge = await this.challonge.getParticipants(url);
 
-        this.challongeClient.participants.index({
-          id: `${subdomain}-${path}`,
-          callback: (err, response) => {
-            if (err) {
-              return reject(err);
-            }
+        const participants = [{
+          displayName: '',
+          username: '',
+        },
+        ..._.map(participantsFromChallonge, (participant) => ({
+          displayName: participant.displayName,
+          username: participant.challongeUsername,
+        }))] as Array<IDataParticipant>;
 
-            const participants = [{
-              displayName: '',
-              username: '',
-            },
-            ..._.map(response, ({ participant }) => ({
-              displayName: participant.displayName,
-              username: participant.challongeUsername,
-            }))] as Array<IDataParticipant>;
+        this.setParticipants(participants);
 
-            this.setParticipants(participants);
+        return resolve(participants);
+      }
 
-            return resolve(participants);
-          },
-        });
-      } else if (url.host.includes('smash.gg')) {
+      if (url.host.includes('smash.gg')) {
         const info = _(url.pathname).split('/').compact().chunk(2)
           .fromPairs()
           .value();
@@ -238,11 +233,9 @@ class Data {
             return resolve(participants);
           }
         }
-
-        return resolve([]);
-      } else {
-        return resolve([]);
       }
+
+      return resolve([]);
     } catch (error) {
       return reject(error);
     }
