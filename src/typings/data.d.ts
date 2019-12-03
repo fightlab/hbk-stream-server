@@ -21,6 +21,7 @@ interface IDataCamera {
 }
 
 interface IDataParticipant {
+  id: number
   username: string
   displayName: string
 }
@@ -28,4 +29,14 @@ interface IDataParticipant {
 interface IDataNightbot {
   bracket: string
   social: string
+}
+
+interface IDataMatch {
+  id: number
+  player1Id: number
+  player2Id: number
+  winnerId: number
+  tournamentId: number
+  p1s: number
+  p2s: number
 }

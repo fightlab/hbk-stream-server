@@ -43,14 +43,15 @@ class Socket {
       });
 
       socket.on('participants-get', () => [
-        this.io.emit('participants', { bracket: data.getBracket(), participants: data.getParticipants() }),
+        this.io.emit('participants', { bracket: data.getBracket(), participants: data.getParticipants(), matches: data.getMatches() }),
       ]);
 
       socket.on('bracket-get', async (url) => {
         data.setBracket(url);
         try {
           const participants = await data.getParticipantsFromBracket(url);
-          socket.emit('participants', { bracket: url, participants });
+          const matches = await data.getMatchesFromBracket(url);
+          socket.emit('participants', { bracket: url, participants, matches });
         } catch (e) {
           console.error(e);
         }

@@ -40,6 +40,8 @@ class Data {
     social: '• FOLLOW US ON • WEB: https://hbk.gg • FACEBOOK: https://www.facebook.com/FightLabBrighton/ • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz •',
   };
 
+  private matches: Array<IDataMatch> = [];
+
   private callGraphQL = ({ query, variables }) => axios({
     url: this.smashAPI,
     method: 'post',
@@ -156,6 +158,8 @@ class Data {
 
   public getParticipants = (): Array<IDataParticipant> => this.participants;
 
+  public getMatches = (): Array<IDataMatch> => this.matches;
+
   public getNightbot = (key?: string): string|IDataNightbot => {
     if (key) return this.nightbot[key] || '';
     return this.nightbot;
@@ -181,6 +185,37 @@ class Data {
     this.nightbot = nightbot as IDataNightbot;
   }
 
+  public setMatches = (matches: Array<object>): void => {
+    this.matches = matches as Array<IDataMatch>;
+  }
+
+  // eslint-disable-next-line no-async-promise-executor
+  public getMatchesFromBracket = (bracket: string): Promise<Array<IDataMatch>> => new Promise(async (resolve, reject) => {
+    try {
+      const url: URL = new URL(bracket);
+
+      if (url.hostname.includes('challonge')) {
+        const matchesFromChallonge = await this.challonge.getMatches(url);
+
+        const matches = _.map(matchesFromChallonge, (match): IDataMatch => ({
+          id: match.id,
+          player1Id: match.player1Id,
+          player2Id: match.player2Id,
+          tournamentId: match.tournamentId,
+          winnerId: match.winnerId,
+          p1s: Challonge.getScoresFromCsv(match.scoresCsv)[0].p1s,
+          p2s: Challonge.getScoresFromCsv(match.scoresCsv)[0].p2s,
+        }));
+
+        this.setMatches(matches);
+
+        return resolve(matches);
+      }
+    } catch (error) {
+      return reject(error);
+    }
+  })
+
   // eslint-disable-next-line no-async-promise-executor
   public getParticipantsFromBracket = (bracket: string): Promise<Array<IDataParticipant>> => new Promise(async (resolve, reject) => {
     try {
@@ -190,10 +225,12 @@ class Data {
         const participantsFromChallonge = await this.challonge.getParticipants(url);
 
         const participants = [{
+          id: 0,
           displayName: '',
           username: '',
         },
         ..._.map(participantsFromChallonge, (participant) => ({
+          id: participant.id,
           displayName: participant.displayName,
           username: participant.challongeUsername,
         }))] as Array<IDataParticipant>;
