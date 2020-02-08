@@ -18,6 +18,7 @@ interface IDataCamera {
   twitter: string
   web: string
   game: string
+  bg: string
 }
 
 interface IDataParticipant {

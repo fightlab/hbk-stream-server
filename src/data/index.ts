@@ -29,6 +29,7 @@ class Data {
     twitter: 'fight_lab',
     web: 'hbk.gg',
     game: 'GAME NAME',
+    bg: 'hbk',
   };
 
   private participants: Array<IDataParticipant> = [];
