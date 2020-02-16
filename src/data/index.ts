@@ -41,6 +41,14 @@ class Data {
     social: '• FOLLOW US ON • WEB: https://hbk.gg • FACEBOOK: https://www.facebook.com/FightLabBrighton/ • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz •',
   };
 
+  private prestream: IDataPreStream = {
+    event: 'Habrewken #000',
+    game: 'Game Fighter Name',
+    bg: 'hbk',
+    countdown: 300,
+    venue: 'BrewDog Brighton',
+  }
+
   private callGraphQL = ({ query, variables }) => axios({
     url: this.smashAPI,
     method: 'post',
@@ -137,16 +145,19 @@ class Data {
     camera,
     bracket,
     participants,
+    prestream,
   }: {
     scoreboard?: IDataScoreboard,
     camera?: IDataCamera,
     bracket?: string,
-    participants?: Array<IDataParticipant>
+    participants?: Array<IDataParticipant>,
+    prestream?:IDataPreStream
   } = {}) {
     if (scoreboard) this.scoreboard = scoreboard;
     if (camera) this.camera = camera;
     if (bracket) this.bracket = bracket;
     if (participants) this.participants = participants;
+    if (prestream) this.prestream = prestream;
   }
 
   public getScoreboard = (): IDataScoreboard => this.scoreboard;
@@ -161,6 +172,8 @@ class Data {
     if (key) return this.nightbot[key] || '';
     return this.nightbot;
   };
+
+  public getPrestream = (): IDataPreStream => this.prestream;
 
   public setScoreboard = (scoreboard: object): void => {
     this.scoreboard = scoreboard as IDataScoreboard;
@@ -181,6 +194,10 @@ class Data {
   public setNightbot = (nightbot: object): void => {
     this.nightbot = nightbot as IDataNightbot;
   }
+
+  public setPrestream = (prestream: object): void => {
+    this.prestream = prestream as IDataPreStream;
+  };
 
   // eslint-disable-next-line no-async-promise-executor
   public getParticipantsFromBracket = (bracket: string): Promise<Array<IDataParticipant>> => new Promise(async (resolve, reject) => {

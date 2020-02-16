@@ -33,6 +33,15 @@ class Socket {
         this.io.emit('camera', camera);
       });
 
+      socket.on('prestream-get', () => {
+        socket.emit('prestream', data.getPrestream());
+      });
+
+      socket.on('prestream-update', (prestream) => {
+        data.setPrestream(prestream);
+        this.io.emit('prestream', prestream);
+      });
+
       socket.on('nightbot-get', () => {
         socket.emit('nightbot', data.getNightbot());
       });

@@ -30,3 +30,11 @@ interface IDataNightbot {
   bracket: string
   social: string
 }
+
+interface IDataPreStream {
+  event: string
+  game: string
+  bg: string
+  countdown: number
+  venue: string
+}
