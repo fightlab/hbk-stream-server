@@ -47,6 +47,8 @@ class Data {
     bg: 'hbk',
     countdown: 300,
     venue: 'BrewDog Brighton',
+    showTimer: true,
+    startText: 'Starts',
   }
 
   private callGraphQL = ({ query, variables }) => axios({

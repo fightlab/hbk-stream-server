@@ -37,4 +37,6 @@ interface IDataPreStream {
   bg: string
   countdown: number
   venue: string
+  showTimer: boolean
+  startText: string
 }
