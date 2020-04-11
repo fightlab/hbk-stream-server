@@ -25,12 +25,15 @@ class Data {
     brewdog: 'Brewdog Brighton',
     fgc: 'Brighton Fighting Game Community',
     date: 'Wednesday Xth MONTH 20XX',
-    facebook: 'fightlabbrighton',
-    twitter: 'fight_lab',
-    web: 'hbk.gg',
     game: 'GAME NAME',
     bg: 'hbk',
   };
+
+  private social: IDataSocial = {
+    web: 'hbk.gg',
+    facebook: 'fightlabbrighton',
+    twitter: 'fight_lab',
+  }
 
   private participants: Array<IDataParticipant> = [];
 
@@ -166,6 +169,8 @@ class Data {
 
   public getCamera = (): IDataCamera => this.camera;
 
+  public getSocial = (): IDataSocial => this.social;
+
   public getBracket = (): string => this.bracket;
 
   public getParticipants = (): Array<IDataParticipant> => this.participants;
@@ -184,6 +189,10 @@ class Data {
   public setCamera = (camera: object): void => {
     this.camera = camera as IDataCamera;
   };
+
+  public setSocial = (social: object): void => {
+    this.social = social as IDataSocial;
+  }
 
   public setBracket = (bracket: string): void => {
     this.bracket = bracket;

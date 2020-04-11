@@ -33,6 +33,15 @@ class Socket {
         this.io.emit('camera', camera);
       });
 
+      socket.on('social-get', () => {
+        socket.emit('social', data.getSocial());
+      });
+
+      socket.on('social-update', (social) => {
+        data.setSocial(social);
+        this.io.emit('social', social);
+      });
+
       socket.on('prestream-get', () => {
         socket.emit('prestream', data.getPrestream());
       });

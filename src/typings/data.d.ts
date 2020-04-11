@@ -14,9 +14,6 @@ interface IDataCamera {
   brewdog: string
   fgc: string
   date: string
-  facebook: string
-  twitter: string
-  web: string
   game: string
   bg: string
 }
@@ -39,4 +36,10 @@ interface IDataPreStream {
   venue: string
   showTimer: boolean
   startText: string
+}
+
+interface IDataSocial {
+  web: string
+  facebook: string
+  twitter: string
 }
