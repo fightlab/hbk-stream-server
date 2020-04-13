@@ -10,14 +10,17 @@ class Data {
   private challonge = new Challonge();
 
   private scoreboard: IDataScoreboard = {
-    p1n: 'Player 1',
-    p2n: 'Player 2',
+    p1n: '',
+    p2n: '',
     p1s: 0,
     p2s: 0,
+    p1l: false,
+    p2l: false,
     tl: 'HBK',
     tr: '#000',
     bl: 'Brewdog',
     br: 'Brighton',
+    lTag: '[L]',
   };
 
   private camera: IDataCamera = {
