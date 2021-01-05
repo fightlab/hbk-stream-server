@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "backpack-core": "^0.8.4",
     "challonge": "^2.2.0",
     "dotenv": "^8.2.0",
