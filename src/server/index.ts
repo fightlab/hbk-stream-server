@@ -1,6 +1,6 @@
-import * as express from 'express';
-import { Server as HttpServer } from 'http';
-import Data from '../data';
+import express from "express";
+import { Server as HttpServer } from "http";
+import Data from "../data";
 
 class Server {
   private data: Data;
@@ -22,29 +22,35 @@ class Server {
 
   private start = (): void => {
     this.http.listen(this.port, this.onListen);
-  }
+  };
 
   private onListen = (): void => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('> in development');
+    if (process.env.NODE_ENV === "development") {
+      console.log("> in development");
     }
 
     console.log(`> listening on port ${this.port}`);
   };
 
-  private getPort = (): number => parseInt(process.env.PORT, 10) || 3000;
+  private getPort = (): number => parseInt(process.env.PORT || "3000", 10);
 
   private setRoutes = (): void => {
-    this.app.get('/', this.getRoot);
-    this.app.get('/nightbot', this.getNightbot);
-  }
+    this.app.get("/", this.getRoot);
+    this.app.get("/nightbot", this.getNightbot);
+  };
 
-  private getRoot = (req: express.Request, res: express.Response): express.Response => res.send('hbk stream server is alive');
+  private getRoot = (
+    req: express.Request,
+    res: express.Response
+  ): express.Response => res.send("hbk stream server is alive");
 
-  private getNightbot = (req: express.Request, res: express.Response): express.Response => {
-    const { key = 'bracket' } = req.query;
-    return res.send(this.data.getNightbot(key));
-  }
+  private getNightbot = (
+    req: express.Request,
+    res: express.Response
+  ): express.Response => {
+    const { key = "bracket" } = req.query;
+    return res.send(this.data.getNightbot(key as string));
+  };
 }
 
 export default Server;

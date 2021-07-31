@@ -1,76 +1,128 @@
-import * as _ from 'lodash';
-import axios from 'axios';
-import Challonge from '../services/challonge';
+import _ from "lodash";
+import axios from "axios";
+import Challonge from "../services/challonge";
+
+export interface IDataScoreboard {
+  p1n: string;
+  p2n: string;
+  p1s: number;
+  p2s: number;
+  p1l: boolean;
+  p2l: boolean;
+  tl: string;
+  tr: string;
+  bl: string;
+  br: string;
+  lTag: string;
+}
+
+export interface IDataCamera {
+  hbk: string;
+  brewdog: string;
+  fgc: string;
+  date: string;
+  game: string;
+  bg: string;
+}
+
+export interface IDataParticipant {
+  username: string;
+  displayName: string;
+}
+
+export interface IDataNightbot {
+  bracket: string;
+  social: string;
+}
+
+export interface IDataPreStream {
+  event: string;
+  game: string;
+  bg: string;
+  countdown: number;
+  venue: string;
+  showTimer: boolean;
+  startText: string;
+}
+
+export interface IDataSocial {
+  web: string;
+  facebook: string;
+  twitter: string;
+}
 
 class Data {
-  private smashAPI: string = 'https://api.smash.gg/gql/alpha';
+  private smashAPI: string = "https://api.smash.gg/gql/alpha";
 
-  private smashToken: string = process.env.SMASHGG_API_KEY;
+  private smashToken: string = process.env.SMASHGG_API_KEY || "";
 
   private challonge = new Challonge();
 
   private scoreboard: IDataScoreboard = {
-    p1n: '',
-    p2n: '',
+    p1n: "",
+    p2n: "",
     p1s: 0,
     p2s: 0,
     p1l: false,
     p2l: false,
-    tl: 'HBK',
-    tr: '#000',
-    bl: 'Brewdog',
-    br: 'Brighton',
-    lTag: '[L]',
+    tl: "HBK",
+    tr: "#000",
+    bl: "Brewdog",
+    br: "Brighton",
+    lTag: "[L]",
   };
 
   private camera: IDataCamera = {
-    hbk: 'Habrewken #000',
-    brewdog: 'Brewdog Brighton',
-    fgc: 'Brighton Fighting Game Community',
-    date: 'Wednesday Xth MONTH 20XX',
-    game: 'GAME NAME',
-    bg: 'hbk',
+    hbk: "Habrewken #000",
+    brewdog: "Brewdog Brighton",
+    fgc: "Brighton Fighting Game Community",
+    date: "Wednesday Xth MONTH 20XX",
+    game: "GAME NAME",
+    bg: "hbk",
   };
 
   private social: IDataSocial = {
-    web: 'hbk.gg',
-    facebook: 'fightlabbrighton',
-    twitter: 'fight_lab',
-  }
+    web: "hbk.gg",
+    facebook: "fightlabbrighton",
+    twitter: "fight_lab",
+  };
 
   private participants: Array<IDataParticipant> = [];
 
-  private bracket: string = '';
+  private bracket: string = "";
 
   private nightbot: IDataNightbot = {
-    bracket: 'https://hbk.challonge.com',
-    social: '• FOLLOW US ON • WEB: https://hbk.gg • FACEBOOK: https://www.facebook.com/FightLabBrighton/ • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz •',
+    bracket: "https://hbk.challonge.com",
+    social:
+      "• FOLLOW US ON • WEB: https://hbk.gg • FACEBOOK: https://www.facebook.com/FightLabBrighton/ • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz •",
   };
 
   private prestream: IDataPreStream = {
-    event: 'Habrewken #000',
-    game: 'Game Fighter Name',
-    bg: 'hbk',
+    event: "Habrewken #000",
+    game: "Game Fighter Name",
+    bg: "hbk",
     countdown: 300,
-    venue: 'BrewDog Brighton',
+    venue: "BrewDog Brighton",
     showTimer: true,
-    startText: 'Starts',
-  }
+    startText: "Starts",
+  };
 
-  private callGraphQL = ({ query, variables }) => axios({
-    url: this.smashAPI,
-    method: 'post',
-    headers: {
-      Authorization: `Bearer ${this.smashToken}`,
-    },
-    data: {
-      query,
-      variables,
-    },
-  })
+  private callGraphQL = ({ query, variables }) =>
+    axios({
+      url: this.smashAPI,
+      method: "post",
+      headers: {
+        Authorization: `Bearer ${this.smashToken}`,
+      },
+      data: {
+        query,
+        variables,
+      },
+    });
 
-  private getTournamentSmash = ({ slug }: { slug: string }) => this.callGraphQL({
-    query: `
+  private getTournamentSmash = ({ slug }: { slug: string }) =>
+    this.callGraphQL({
+      query: `
       query TournamentInformation($tournamentSlug: String!){
         tournament(slug: $tournamentSlug){
           id
@@ -84,13 +136,16 @@ class Data {
         }
       }
     `,
-    variables: {
-      tournamentSlug: slug,
-    },
-  })
+      variables: {
+        tournamentSlug: slug,
+      },
+    });
 
   private getParticipantsSmash = async ({
-    eventId, page = 1, perPage = 25, participants = [],
+    eventId,
+    page = 1,
+    perPage = 25,
+    participants = [],
   }) => {
     const event = await this.callGraphQL({
       query: `
@@ -132,21 +187,26 @@ class Data {
       },
     });
 
-    if (_.get(event, 'data.data.event.entrants')) {
-      const entrants = _.get(event, 'data.data.event.entrants');
+    if (_.get(event, "data.data.event.entrants")) {
+      const entrants = _.get(event, "data.data.event.entrants");
       const { pageInfo } = entrants;
       // eslint-disable-next-line no-param-reassign
-      participants = participants.concat(entrants.nodes.map((entrant) => _.get(entrant, 'participants[0]', null)));
+      participants = participants.concat(
+        entrants.nodes.map((entrant) => _.get(entrant, "participants[0]", null))
+      );
 
       if (page < pageInfo.totalPages) {
         return this.getParticipantsSmash({
-          eventId, page: page + 1, perPage, participants,
+          eventId,
+          page: page + 1,
+          perPage,
+          participants,
         });
       }
     }
 
     return _.compact(participants);
-  }
+  };
 
   constructor({
     scoreboard,
@@ -155,11 +215,11 @@ class Data {
     participants,
     prestream,
   }: {
-    scoreboard?: IDataScoreboard,
-    camera?: IDataCamera,
-    bracket?: string,
-    participants?: Array<IDataParticipant>,
-    prestream?:IDataPreStream
+    scoreboard?: IDataScoreboard;
+    camera?: IDataCamera;
+    bracket?: string;
+    participants?: Array<IDataParticipant>;
+    prestream?: IDataPreStream;
   } = {}) {
     if (scoreboard) this.scoreboard = scoreboard;
     if (camera) this.camera = camera;
@@ -178,8 +238,8 @@ class Data {
 
   public getParticipants = (): Array<IDataParticipant> => this.participants;
 
-  public getNightbot = (key?: string): string|IDataNightbot => {
-    if (key) return this.nightbot[key] || '';
+  public getNightbot = (key?: string): string | IDataNightbot => {
+    if (key) return this.nightbot[key] || "";
     return this.nightbot;
   };
 
@@ -195,7 +255,7 @@ class Data {
 
   public setSocial = (social: object): void => {
     this.social = social as IDataSocial;
-  }
+  };
 
   public setBracket = (bracket: string): void => {
     this.bracket = bracket;
@@ -207,66 +267,94 @@ class Data {
 
   public setNightbot = (nightbot: object): void => {
     this.nightbot = nightbot as IDataNightbot;
-  }
+  };
 
   public setPrestream = (prestream: object): void => {
     this.prestream = prestream as IDataPreStream;
   };
 
   // eslint-disable-next-line no-async-promise-executor
-  public getParticipantsFromBracket = (bracket: string): Promise<Array<IDataParticipant>> => new Promise(async (resolve, reject) => {
-    try {
-      const url: URL = new URL(bracket);
+  public getParticipantsFromBracket = (
+    bracket: string
+  ): Promise<Array<IDataParticipant>> =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const url: URL = new URL(bracket);
 
-      if (url.host.includes('challonge')) {
-        const participantsFromChallonge = await this.challonge.getParticipants(url);
+        if (url.host.includes("challonge")) {
+          const participantsFromChallonge =
+            await this.challonge.getParticipants(url);
 
-        const participants = [{
-          displayName: '',
-          username: '',
-        },
-        ..._.map(participantsFromChallonge, (participant) => ({
-          displayName: participant.displayName,
-          username: participant.challongeUsername,
-        }))] as Array<IDataParticipant>;
+          const participants = [
+            {
+              displayName: "",
+              username: "",
+            },
+            ..._.map(participantsFromChallonge, (participant) => ({
+              displayName: participant.displayName,
+              username: participant.challongeUsername,
+            })),
+          ] as Array<IDataParticipant>;
 
-        this.setParticipants(participants);
+          this.setParticipants(participants);
 
-        return resolve(participants);
-      }
+          return resolve(participants);
+        }
 
-      if (url.host.includes('smash.gg')) {
-        const info = _(url.pathname).split('/').compact().chunk(2)
-          .fromPairs()
-          .value();
+        if (url.host.includes("smash.gg")) {
+          const info = _(url.pathname)
+            .split("/")
+            .compact()
+            .chunk(2)
+            .fromPairs()
+            .value();
 
-        if (info.tournament && info.events) {
-          const tournament = await this.getTournamentSmash({ slug: info.tournament });
+          if (info.tournament && info.events) {
+            const tournament = await this.getTournamentSmash({
+              slug: info.tournament,
+            });
 
-          if (_.get(tournament, 'data.data.tournament.slug', '') === `tournament/${info.tournament}`) {
-            const event = _.find(tournament.data.data.tournament.events, (e) => e.slug === `tournament/${info.tournament}/event/${info.events}`);
+            if (
+              _.get(tournament, "data.data.tournament.slug", "") ===
+              `tournament/${info.tournament}`
+            ) {
+              const event = _.find(
+                tournament.data.data.tournament.events,
+                (e) =>
+                  e.slug ===
+                  `tournament/${info.tournament}/event/${info.events}`
+              );
 
-            const participantsSmash = await this.getParticipantsSmash({ eventId: event.id });
+              const participantsSmash = await this.getParticipantsSmash({
+                eventId: event.id,
+              });
 
-            const participants = [{
-              displayName: '',
-              username: '',
-            }, ...participantsSmash.map((participant) => ({
-              displayName: `${_.get(participant, 'prefix') ? `${_.get(participant, 'prefix')} | ` : ''}${_.get(participant, 'gamerTag', '')}`,
-              username: _.get(participant, 'contactInfo.name', ''),
-            }))] as Array<IDataParticipant>;
+              const participants = [
+                {
+                  displayName: "",
+                  username: "",
+                },
+                ...participantsSmash.map((participant) => ({
+                  displayName: `${
+                    _.get(participant, "prefix")
+                      ? `${_.get(participant, "prefix")} | `
+                      : ""
+                  }${_.get(participant, "gamerTag", "")}`,
+                  username: _.get(participant, "contactInfo.name", ""),
+                })),
+              ] as Array<IDataParticipant>;
 
-            this.setParticipants(participants);
-            return resolve(participants);
+              this.setParticipants(participants);
+              return resolve(participants);
+            }
           }
         }
-      }
 
-      return resolve([]);
-    } catch (error) {
-      return reject(error);
-    }
-  })
+        return resolve([]);
+      } catch (error) {
+        return reject(error);
+      }
+    });
 }
 
 export default Data;
