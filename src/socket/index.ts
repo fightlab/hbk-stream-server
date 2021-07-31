@@ -8,7 +8,7 @@ class Socket {
   constructor(http: Server, data: Data) {
     this.io = new SocketServer(http, {
       cors: {
-        origin: "http://localhost:1234",
+        origin: process.env.CLIENT_URL,
         methods: ["GET", "POST"],
       },
     });
