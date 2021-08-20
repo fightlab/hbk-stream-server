@@ -51,6 +51,14 @@ export interface IDataSocial {
   twitter: string;
 }
 
+export interface IDataMatch {
+  identifier: string;
+  player1DisplayName: string;
+  player2DisplayName: string;
+  player1Score: number;
+  player2Score: number;
+}
+
 class Data {
   private smashAPI: string = "https://api.smash.gg/gql/alpha";
 
@@ -106,6 +114,16 @@ class Data {
     showTimer: true,
     startText: "Starts",
   };
+
+  private defaultMatch: IDataMatch = {
+    identifier: "N/A",
+    player1DisplayName: "N/A",
+    player2DisplayName: "N/A",
+    player1Score: 0,
+    player2Score: 0,
+  };
+
+  private matches: Array<IDataMatch> = Array(10).fill(this.defaultMatch);
 
   private callGraphQL = ({ query, variables }) =>
     axios({
@@ -245,38 +263,44 @@ class Data {
 
   public getPrestream = (): IDataPreStream => this.prestream;
 
-  public setScoreboard = (scoreboard: object): void => {
-    this.scoreboard = scoreboard as IDataScoreboard;
+  public getMatches = (): Array<IDataMatch> => this.matches;
+
+  public setScoreboard = (scoreboard: IDataScoreboard): void => {
+    this.scoreboard = scoreboard;
   };
 
-  public setCamera = (camera: object): void => {
-    this.camera = camera as IDataCamera;
+  public setCamera = (camera: IDataCamera): void => {
+    this.camera = camera;
   };
 
-  public setSocial = (social: object): void => {
-    this.social = social as IDataSocial;
+  public setSocial = (social: IDataSocial): void => {
+    this.social = social;
   };
 
   public setBracket = (bracket: string): void => {
     this.bracket = bracket;
   };
 
-  public setParticipants = (participants: Array<object>): void => {
-    this.participants = participants as Array<IDataParticipant>;
+  public setParticipants = (participants: Array<IDataParticipant>): void => {
+    this.participants = participants;
   };
 
-  public setNightbot = (nightbot: object): void => {
-    this.nightbot = nightbot as IDataNightbot;
+  public setNightbot = (nightbot: IDataNightbot): void => {
+    this.nightbot = nightbot;
   };
 
-  public setPrestream = (prestream: object): void => {
-    this.prestream = prestream as IDataPreStream;
+  public setPrestream = (prestream: IDataPreStream): void => {
+    this.prestream = prestream;
   };
 
-  // eslint-disable-next-line no-async-promise-executor
+  public setMatches = (matches: Array<IDataMatch>): void => {
+    this.matches = matches;
+  };
+
   public getParticipantsFromBracket = (
     bracket: string
   ): Promise<Array<IDataParticipant>> =>
+    // eslint-disable-next-line no-async-promise-executor
     new Promise(async (resolve, reject) => {
       try {
         const url: URL = new URL(bracket);
@@ -355,6 +379,31 @@ class Data {
         return reject(error);
       }
     });
+
+  public getTop8MatchesFromBracket = async (
+    bracket: string
+  ): Promise<Array<IDataMatch>> => {
+    try {
+      const url: URL = new URL(bracket);
+
+      if (url.host.includes("challonge")) {
+        const matches = await this.challonge.getTop8Matches(url);
+
+        this.setMatches(
+          matches.map((m) => ({
+            identifier: m.identifier || "N/A",
+            player1DisplayName: m.player1DisplayName || "N/A",
+            player2DisplayName: m.player2DisplayName || "N/A",
+            player1Score: m.player1Score || 0,
+            player2Score: m.player2Score || 0,
+          }))
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return this.getMatches();
+  };
 }
 
 export default Data;
