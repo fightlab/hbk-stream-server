@@ -59,6 +59,13 @@ export interface IDataMatch {
   player2Score: number;
 }
 
+export interface IDataCommentatorCamera {
+  cl: string;
+  clTwitter: string;
+  cr: string;
+  crTwitter: string;
+}
+
 class Data {
   private smashAPI: string = "https://api.smash.gg/gql/alpha";
 
@@ -122,6 +129,13 @@ class Data {
     player1Score: 0,
     player2Score: 0,
   };
+  
+  private commentatorCamera: IDataCommentatorCamera = {
+    cl: 'CommentatorLeft',
+    clTwitter: '@LeftTwitter',
+    cr: 'CommentatorRight',
+    crTwitter: '@RightTwitter',
+  }
 
   private matches: Array<IDataMatch> = Array(10).fill(this.defaultMatch);
 
@@ -264,6 +278,8 @@ class Data {
   public getPrestream = (): IDataPreStream => this.prestream;
 
   public getMatches = (): Array<IDataMatch> => this.matches;
+  
+  public getCommentatorCamera = (): IDataCommentatorCamera => this.commentatorCamera;
 
   public setScoreboard = (scoreboard: IDataScoreboard): void => {
     this.scoreboard = scoreboard;
@@ -296,6 +312,10 @@ class Data {
   public setMatches = (matches: Array<IDataMatch>): void => {
     this.matches = matches;
   };
+  
+  public setCommentatorCamera = (commentatorCamera: IDataCommentatorCamera): void => {
+    this.commentatorCamera = commentatorCamera;
+  }
 
   public getParticipantsFromBracket = (
     bracket: string

@@ -60,6 +60,15 @@ class Socket {
         data.setNightbot(nightbot);
         this.io.emit("nightbot", nightbot);
       });
+      
+      socket.on("commentator-get", () => {
+        socket.emit("commentator", data.getCommentatorCamera());
+      })
+      
+      socket.on("commentator-update", (commentatorCamera) => {
+        data.setCommentatorCamera(commentatorCamera);
+        this.io.emit("commentator", commentatorCamera);
+      })
 
       socket.on("participants-get", () => {
         this.io.emit("participants", {
