@@ -1,17 +1,17 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "noUnusedLocals": true,
-    "outDir": "build",
-    "strict": true,
-    "noImplicitAny": false,
-    "target": "ES2020",
-    "baseUrl": "src",
-    "paths": {
-      "~*": ["./*"]
-    }
-  },
-  "include": ["src"]
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"module": "commonjs",
+		"noUnusedLocals": true,
+		"outDir": "build",
+		"strict": true,
+		"noImplicitAny": false,
+		"target": "ES2020",
+		"baseUrl": "src",
+		"paths": {
+			"~*": ["./*"]
+		}
+	},
+	"include": ["src"]
 }
