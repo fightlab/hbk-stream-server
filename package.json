@@ -18,7 +18,8 @@
 		"build": "rimraf ./build && tsc",
 		"start": "npm run build && node build/index.js",
 		"prettier:check": "prettier --check .",
-		"prettier:fix": "prettier --write ."
+		"prettier:fix": "prettier --write .",
+		"tsc": "tsc"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.14.177",
