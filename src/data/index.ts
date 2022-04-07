@@ -203,6 +203,10 @@ class Data {
                   id
                   prefix
                   gamerTag
+                  entrants {
+                    id
+                    name
+                  }
                   contactInfo {
                     id
                     name
@@ -382,11 +386,7 @@ class Data {
 									username: "",
 								},
 								...participantsSmash.map((participant) => ({
-									displayName: `${
-										_.get(participant, "prefix")
-											? `${_.get(participant, "prefix")} | `
-											: ""
-									}${_.get(participant, "gamerTag", "")}`,
+									displayName: `${_.get(participant, "entrants[0].name", "")}`,
 									username: _.get(participant, "contactInfo.name", ""),
 								})),
 							] as Array<IDataParticipant>;
