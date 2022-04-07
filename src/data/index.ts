@@ -1,6 +1,7 @@
 import _ from "lodash";
 import axios from "axios";
 import Challonge from "../services/challonge";
+import { getTop8MatchesSmash } from "../services/smash";
 
 export interface IDataScoreboard {
 	p1n: string;
@@ -356,7 +357,7 @@ class Data {
 						.fromPairs()
 						.value();
 
-					if (info.tournament && info.events) {
+					if (info.tournament && info.event) {
 						const tournament = await this.getTournamentSmash({
 							slug: info.tournament,
 						});
@@ -368,8 +369,7 @@ class Data {
 							const event = _.find(
 								tournament.data.data.tournament.events,
 								(e) =>
-									e.slug ===
-									`tournament/${info.tournament}/event/${info.events}`
+									e.slug === `tournament/${info.tournament}/event/${info.event}`
 							);
 
 							const participantsSmash = await this.getParticipantsSmash({
@@ -421,6 +421,43 @@ class Data {
 						player2Score: m.player2Score || 0,
 					}))
 				);
+			}
+
+			if (url.host.includes("smash.gg")) {
+				const info = _(url.pathname)
+					.split("/")
+					.compact()
+					.chunk(2)
+					.fromPairs()
+					.value();
+
+				if (info.tournament && info.event) {
+					const tournament = await this.getTournamentSmash({
+						slug: info.tournament,
+					});
+
+					if (
+						_.get(tournament, "data.data.tournament.slug", "") ===
+						`tournament/${info.tournament}`
+					) {
+						const event = _.find(
+							tournament.data.data.tournament.events,
+							(e) =>
+								e.slug === `tournament/${info.tournament}/event/${info.event}`
+						);
+
+						const matches = await getTop8MatchesSmash({ eventId: event.id });
+						this.setMatches(
+							matches.map((m) => ({
+								identifier: m.identifier || "N/A",
+								player1DisplayName: m.player1DisplayName || "N/A",
+								player2DisplayName: m.player2DisplayName || "N/A",
+								player1Score: m.player1Score || 0,
+								player2Score: m.player2Score || 0,
+							}))
+						);
+					}
+				}
 			}
 		} catch (error) {
 			console.error(error);

@@ -10,7 +10,7 @@ export interface IChallongeParticipant {
 }
 
 export interface IChallongeMatch {
-	id?: number;
+	id?: number | string;
 	round?: number;
 	identifier?: string;
 	player1Id?: number;
