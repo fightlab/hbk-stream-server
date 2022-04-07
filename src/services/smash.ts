@@ -173,23 +173,26 @@ export const getTop8MatchesSmash = async ({
 	const gfm = sets
 		.filter((m) => gf >= 0 && m.round === gf)
 		.map((m) => ({ ...m, identifier: "Grand Final" }));
-	const wfm = sets
+		const wfm = sets
 		.filter((m) => gf >= 1 && m.round === wf)
 		.map((m) => ({ ...m, identifier: "Winners Final" }));
-	const wsfm = sets
+		const wsfm = sets
 		.filter((m) => gf >= 2 && m.round === wsf)
+		.sort((a, b) => +a.id - +b.id)
 		.map((m, i) => ({ ...m, identifier: `Winners SF ${i + 1}` }));
-	const lfm = sets
+		const lfm = sets
 		.filter((m) => lf <= -1 && m.round === lf)
 		.map((m) => ({ ...m, identifier: "Losers Final" }));
-	const lsfm = sets
+		const lsfm = sets
 		.filter((m) => lf <= -2 && m.round === lsf)
 		.map((m) => ({ ...m, identifier: "Losers SF" }));
-	const lqfm = sets
+		const lqfm = sets
 		.filter((m) => lf <= -3 && m.round === lqf)
+		.sort((a, b) => +a.id - +b.id)
 		.map((m, i) => ({ ...m, identifier: `Losers QF ${i + 1}` }));
-	const lt8m = sets
+		const lt8m = sets
 		.filter((m) => lf <= -4 && m.round === lt8)
+		.sort((a, b) => +a.id - +b.id)
 		.map((m, i) => ({ ...m, identifier: `Losers T8 ${i + 1}` }));
 
 	const t8Matches = [
@@ -205,10 +208,10 @@ export const getTop8MatchesSmash = async ({
 	return map(t8Matches, (m) => {
 		const player1 = m.slots[0];
 		const player2 = m.slots[1];
-		const winner = find(m.slots, (s) => s.standing.placement === 1);
-		const loser = find(m.slots, (s) => s.standing.placement === 2);
+		const winner = find(m.slots, (s) => s.standing?.placement === 1);
+		const loser = find(m.slots, (s) => s.standing?.placement === 2);
 		const scoresCsv =
-			player1.standing.stats.score.value && player2.standing.stats.score.value
+			player1.standing?.stats.score.value && player2.standing?.stats.score.value
 				? `${player1.standing.stats.score.value}-${player2.standing.stats.score.value}`
 				: undefined;
 
