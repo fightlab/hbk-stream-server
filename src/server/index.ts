@@ -1,5 +1,6 @@
 import express from "express";
 import { Server as HttpServer } from "http";
+import cors from "cors";
 import Data from "../data";
 
 class Server {
@@ -14,6 +15,7 @@ class Server {
 	constructor(data: Data) {
 		this.data = data;
 		this.app = express();
+		this.app.use(cors());
 		this.setRoutes();
 		this.http = new HttpServer(this.app);
 		this.port = this.getPort();

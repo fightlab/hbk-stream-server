@@ -1,39 +1,3 @@
-// `query EventSets($eventId: ID!, $page: Int!, $perPage: Int!) {
-//   event(id: $eventId) {
-//     id
-//     name
-//     sets(
-//       page: $page
-//       perPage: $perPage
-//       sortType: NONE
-//     ) {
-//       pageInfo {
-//         total
-//       }
-//       nodes {
-//         fullRoundText
-//         round
-//         identifier
-//         slots {
-//       		standing {
-//       			placement
-//             entrant {
-//               id
-//               name
-//             }
-//         		stats {
-//           		score {
-//             		label
-//             		value
-//           		}
-//         		}
-//       		}
-//     		}
-//       }
-//     }
-//   }
-// }`
-
 import axios from "axios";
 import { compact, get, map, maxBy, minBy, find } from "lodash";
 import { IChallongeMatchTransformed } from "./challonge";
