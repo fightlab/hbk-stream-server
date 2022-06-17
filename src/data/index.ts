@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import _ from "lodash";
 import axios from "axios";
 import Challonge from "../services/challonge";
@@ -334,6 +335,8 @@ class Data {
 				const url: URL = new URL(bracket);
 
 				if (url.host.includes("challonge")) {
+					// disable challonge for now
+					return [];
 					const participantsFromChallonge =
 						await this.challonge.getParticipants(url);
 
@@ -410,6 +413,8 @@ class Data {
 			const url: URL = new URL(bracket);
 
 			if (url.host.includes("challonge")) {
+				// disable challonge for now
+				return [];
 				const matches = await this.challonge.getTop8Matches(url);
 
 				this.setMatches(
