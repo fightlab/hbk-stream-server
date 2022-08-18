@@ -356,7 +356,7 @@ class Data {
 					return resolve(participants);
 				}
 
-				if (url.host.includes("smash.gg")) {
+				if (url.host.includes("smash.gg") || url.host.includes("start.gg")) {
 					const info = _(url.pathname)
 						.split("/")
 						.compact()
@@ -428,7 +428,7 @@ class Data {
 				);
 			}
 
-			if (url.host.includes("smash.gg")) {
+			if (url.host.includes("smash.gg") || url.host.includes("start.gg")) {
 				const info = _(url.pathname)
 					.split("/")
 					.compact()

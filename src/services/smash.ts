@@ -25,7 +25,7 @@ interface ISmashSet {
 	}>;
 }
 
-const smashAPI: string = "https://api.smash.gg/gql/alpha";
+const smashAPI: string = "https://api.start.gg/gql/alpha";
 
 const smashToken: string = process.env.SMASHGG_API_KEY || "";
 
