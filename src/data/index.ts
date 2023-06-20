@@ -1,8 +1,8 @@
 /* eslint-disable no-unreachable */
 import _ from "lodash";
 import axios from "axios";
-import Challonge from "../services/challonge";
 import { getTop8MatchesSmash } from "../services/smash";
+import { getTop8Matches, getParticipants } from "../services/challongev2";
 
 export interface IDataScoreboard {
 	p1n: string;
@@ -69,11 +69,9 @@ export interface IDataCommentatorCamera {
 }
 
 class Data {
-	private smashAPI: string = "https://api.smash.gg/gql/alpha";
+	private smashAPI: string = "https://api.start.gg/gql/alpha";
 
 	private smashToken: string = process.env.SMASHGG_API_KEY || "";
-
-	private challonge = new Challonge();
 
 	private scoreboard: IDataScoreboard = {
 		p1n: "",
@@ -335,20 +333,14 @@ class Data {
 				const url: URL = new URL(bracket);
 
 				if (url.host.includes("challonge")) {
-					// disable challonge for now
-					return [];
-					const participantsFromChallonge =
-						await this.challonge.getParticipants(url);
+					const participantsFromChallonge = await getParticipants(url);
 
 					const participants = [
 						{
 							displayName: "",
 							username: "",
 						},
-						..._.map(participantsFromChallonge, (participant) => ({
-							displayName: participant.displayName,
-							username: participant.challongeUsername,
-						})),
+						...participantsFromChallonge,
 					] as Array<IDataParticipant>;
 
 					this.setParticipants(participants);
@@ -413,9 +405,7 @@ class Data {
 			const url: URL = new URL(bracket);
 
 			if (url.host.includes("challonge")) {
-				// disable challonge for now
-				return [];
-				const matches = await this.challonge.getTop8Matches(url);
+				const matches = await getTop8Matches(url);
 
 				this.setMatches(
 					matches.map((m) => ({
