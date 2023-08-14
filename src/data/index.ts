@@ -49,7 +49,6 @@ export interface IDataPreStream {
 
 export interface IDataSocial {
 	web: string;
-	facebook: string;
 	twitter: string;
 }
 
@@ -97,8 +96,7 @@ class Data {
 	};
 
 	private social: IDataSocial = {
-		web: "hbk.gg",
-		facebook: "fightlabbrighton",
+		web: "fightlab.gg",
 		twitter: "fight_lab",
 	};
 
@@ -107,9 +105,9 @@ class Data {
 	private bracket: string = "";
 
 	private nightbot: IDataNightbot = {
-		bracket: "https://hbk.challonge.com",
+		bracket: "https://fightlab.challonge.com",
 		social:
-			"• FOLLOW US ON • WEB: https://hbk.gg • FACEBOOK: https://www.facebook.com/FightLabBrighton/ • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz •",
+			"Enjoying the Stream? Please give us a follow 🥰!• WEB: https://fightlab.gg • TWITTER: https://twitter.com/fight_lab • DISCORD: https://discord.gg/rjpDJdz",
 	};
 
 	private prestream: IDataPreStream = {
